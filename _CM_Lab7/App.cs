@@ -71,6 +71,7 @@ namespace _CM_Lab7
             } 
             else
             {
+                listBox.Items.Add("Система несовместима с методом Крамера!");
                 return null;
             }
         }
