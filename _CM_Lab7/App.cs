@@ -28,20 +28,24 @@ namespace _CM_Lab7
         {
             18.422, 12.844, 9.659, 7.394, 5.670, 4.303, 3.196, 2.297, 1.572, 1.000, 0.569
         };
-        
-        IEnumerable<double> Squared()
+
+        List<double> lnx = new List<double>();
+
+        List<double> lny = new List<double>();
+
+        IEnumerable<double> Squared(List<double> list)
         {
-            for(int i = 0; i < x.Count; i++)
+            for(int i = 0; i < list.Count; i++)
             {
-                yield return Math.Pow(x[i], 2);
+                yield return Math.Pow(list[i], 2);
             }
         }
 
-        IEnumerable<double> Mul()
+        IEnumerable<double> Mul(List<double> list1, List<double> list2)
         {
-            for (int i = 0; i < x.Count; i++)
+            for (int i = 0; i < list1.Count; i++)
             {
-                yield return x[i] * y[i];
+                yield return list1[i] * list2[i];
             }
         }
 
@@ -57,12 +61,12 @@ namespace _CM_Lab7
                     {
                         new List<double> { Equal[0],  Mtrx[0][1] },
                         new List<double> { Equal[1],  Mtrx[1][1] }
-                    }),
+                    }) / FindDet(Mtrx),
                     FindDet(new List<List<double>> // y
                     {
                         new List<double> { Mtrx[0][0],  Equal[0] },
                         new List<double> { Mtrx[1][0],  Equal[1] }
-                    })
+                    }) / FindDet(Mtrx)
                 };
             } 
             else
@@ -90,70 +94,6 @@ namespace _CM_Lab7
             listBox.Items.Add($"Зигма: {ToShitDeltaY(Array)}");
         }
 
-        double FindM()
-        {
-            double Sum1() 
-            {
-                double sum = 0;
-                for(int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Log(x[i]) * Math.Log(y[i]);
-                }
-                return sum;
-            }
-            double Sum2()
-            {
-                double sum = 0;
-                for (int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Log(x[i]);
-                }
-                return sum;
-            }
-            double Sum3()
-            {
-                double sum = 0;
-                for (int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Log(y[i]);
-                }
-                return sum;
-            }
-            double Sum4()
-            {
-                double sum = 0;
-                for (int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Pow(Math.Log(x[i]), 2);
-                }
-                return sum;
-            }
-            return (x.Count * Sum1() - Sum2() * Sum3()) / (Sum4() - Math.Pow(Sum2(), 2));
-        }
-
-        double FindC(double m)
-        {
-            double Sum1()
-            {
-                double sum = 0;
-                for(int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Log(y[i]);
-                }
-                return sum;
-            }
-            double Sum2()
-            {
-                double sum = 0;
-                for (int i = 0; i < x.Count; i++)
-                {
-                    sum += Math.Log(x[i]);
-                }
-                return sum;
-            }
-            return Math.Exp(/*(1 / x.Count)*/0.09 * (Sum1() - m * Sum2()));
-        }
-
         double ToShitDeltaY(List<double> Array)
         {
             double min = Math.Abs(Array[1] - Array[0]);
@@ -167,12 +107,41 @@ namespace _CM_Lab7
             return min;
         }
 
-        void BuildDegree(double sumx, double sumyx, double sumsqx)
+        void BuildLogs()
+        {
+            List<double> Sum = new List<double>() { 0, 0, 0, 0 };
+            dataGridView.Rows.Add("ln(x)");
+            dataGridView.Rows.Add("ln(y)");
+            dataGridView.Rows.Add("Sqr(ln(x))");
+            dataGridView.Rows.Add("ln(x)ln(y)");
+            for (int i = 0; i < x.Count; i++)
+            {
+                dataGridView.Rows[4].Cells[i + 1].Value = Math.Log(x[i]);
+                lnx.Add(Math.Log(x[i]));
+                Sum[0] += Math.Log(x[i]);
+                dataGridView.Rows[5].Cells[i + 1].Value = Math.Log(y[i]);
+                lny.Add(Math.Log(y[i]));
+                Sum[1] += Math.Log(y[i]);
+                dataGridView.Rows[6].Cells[i + 1].Value = Squared(lnx).ToArray()[i];
+                Sum[2] += Squared(lnx).ToArray()[i];
+                dataGridView.Rows[7].Cells[i + 1].Value = Mul(lnx, lny).ToArray()[i];
+                Sum[3] += Mul(lnx, lny).ToArray()[i];
+            }
+            dataGridView.Rows[4].Cells[12].Value = Sum[0];
+            dataGridView.Rows[5].Cells[12].Value = Sum[1];
+            dataGridView.Rows[6].Cells[12].Value = Sum[2];
+            dataGridView.Rows[7].Cells[12].Value = Sum[3];
+            BuildDegree(Sum[0], Sum[1], Sum[2], Sum[3]);
+        }
+
+
+        void BuildDegree(double sumx, double sumy, double sumsqx, double sumyx)
         {
             listBox.Items.Add("/// Степенной ///");
             chart.Series.Add(new Series("Степенная") { ChartType = SeriesChartType.Line });
-            double m = FindM();
-            double c = FindC(m);
+            listBox.Items.Add("Решение методом Крамера...");
+            double m = Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[0];
+            double c = Math.Exp(Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[1]);
             List<double> Array = new List<double>();
             listBox.Items.Add($"Значение c: {c}");
             listBox.Items.Add($"Значение m: {m}");
@@ -204,10 +173,10 @@ namespace _CM_Lab7
                 Sum[0] += x[i];
                 dataGridView.Rows[1].Cells[i + 1].Value = y[i];
                 Sum[1] += y[i];
-                dataGridView.Rows[2].Cells[i + 1].Value = Squared().ToArray()[i];
-                Sum[2] += Squared().ToArray()[i];
-                dataGridView.Rows[3].Cells[i + 1].Value = Mul().ToArray()[i];
-                Sum[3] += Mul().ToArray()[i];
+                dataGridView.Rows[2].Cells[i + 1].Value = Squared(x).ToArray()[i];
+                Sum[2] += Squared(x).ToArray()[i];
+                dataGridView.Rows[3].Cells[i + 1].Value = Mul(x, y).ToArray()[i];
+                Sum[3] += Mul(x, y).ToArray()[i];
             }
             dataGridView.Rows[0].Cells[12].Value = Sum[0];
             dataGridView.Rows[1].Cells[12].Value = Sum[1];
@@ -220,7 +189,7 @@ namespace _CM_Lab7
             listBox.Items.Add($"Значение k: {k}");
             listBox.Items.Add($"Значение b: {b}");
             BuildLinear(k, b);
-            BuildDegree(Sum[0], Sum[3], Sum[2]);
+            BuildLogs();
             listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
             Start.Visible = false;
         }
