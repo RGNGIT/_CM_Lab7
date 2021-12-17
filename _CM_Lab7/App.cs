@@ -80,21 +80,22 @@ namespace _CM_Lab7
 
         double PreferedValue;
         string PreferedString;
+        List<double> LinearArray = new List<double>();
+        List<double> DegreeArray = new List<double>();
 
         void BuildLinear(double k, double b)
         {
             listBox.Items.Add("/// Линейный ///");
             chart.Series.Add(new Series("Линейная") { ChartType = SeriesChartType.Line });
             listBox.Items.Add($"Линейное уравнение: y = {k}x + ({b})");
-            List<double> Array = new List<double>();
-            for(int i = 0; i < x.Count; i++)
+            for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Линейная"].Points.AddXY(x[i], k * x[i] + b);
-                Array.Add(k * x[i] + b);
+                LinearArray.Add(k * x[i] + b);
             }
-            PreferedValue = ToShitDeltaY(Array);
+            PreferedValue = ToShitDeltaY(LinearArray);
             PreferedString = "линейный";
-            listBox.Items.Add($"Зигма: {ToShitDeltaY(Array)}");
+            listBox.Items.Add($"Зигма: {ToShitDeltaY(LinearArray)}");
         }
 
         double ToShitDeltaY(List<double> Array)
@@ -145,20 +146,43 @@ namespace _CM_Lab7
             listBox.Items.Add("Решение методом Крамера...");
             double m = Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[0];
             double c = Math.Exp(Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[1]);
-            List<double> Array = new List<double>();
             listBox.Items.Add($"Значение c: {c}");
             listBox.Items.Add($"Значение m: {m}");
             listBox.Items.Add($"Степенное уравнение: y = {c}x^{m}");
             for(int i = 0; i < x.Count; i++)
             {
                 chart.Series["Степенная"].Points.AddXY(x[i], c * Math.Pow(x[i], m));
-                Array.Add(c * Math.Pow(x[i], m));
+                DegreeArray.Add(c * Math.Pow(x[i], m));
             }
-            if(PreferedValue > ToShitDeltaY(Array))
+            if(PreferedValue > ToShitDeltaY(DegreeArray))
             {
                 PreferedString = "степенной";
             }
-            listBox.Items.Add($"Зигма: {ToShitDeltaY(Array)}");
+            listBox.Items.Add($"Зигма: {ToShitDeltaY(DegreeArray)}");
+        }
+
+        void FindSuareDifference()
+        {
+            dataGridView.Rows.Add("y(лин)");
+            dataGridView.Rows.Add("y(стп)");
+            dataGridView.Rows.Add("y - y(лин)");
+            dataGridView.Rows.Add("y - y(стп)");
+            List<double> Sum = new List<double>() { 0, 0, 0, 0 };
+            for (int i = 0; i < x.Count; i++)
+            {
+                dataGridView.Rows[8].Cells[i + 1].Value = LinearArray[i];
+                Sum[0] += LinearArray[i];
+                dataGridView.Rows[9].Cells[i + 1].Value = DegreeArray[i];
+                Sum[1] += DegreeArray[i];
+                dataGridView.Rows[10].Cells[i + 1].Value = Math.Pow(y[i] - LinearArray[i], 2);
+                Sum[2] += Math.Pow(y[i] - LinearArray[i], 2);
+                dataGridView.Rows[11].Cells[i + 1].Value = Math.Pow(y[i] - DegreeArray[i], 2);
+                Sum[3] += Math.Pow(y[i] - DegreeArray[i], 2);
+            }
+            dataGridView.Rows[8].Cells[12].Value = Sum[0];
+            dataGridView.Rows[9].Cells[12].Value = Sum[1];
+            dataGridView.Rows[10].Cells[12].Value = Sum[2];
+            dataGridView.Rows[11].Cells[12].Value = Sum[3];
         }
 
         private void Start_Click(object sender, EventArgs e)
@@ -193,6 +217,7 @@ namespace _CM_Lab7
             listBox.Items.Add($"Значение b: {b}");
             BuildLinear(k, b);
             BuildLogs();
+            FindSuareDifference();
             listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
             Start.Visible = false;
         }
