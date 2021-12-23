@@ -21,14 +21,12 @@ namespace _CM_Lab7
 
         List<double> x = new List<double>()
         {
-            0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1
-            /*1.5, 1.7, 1.71, 1.8, 2, 2.1, 2.2, 2.3, 2.35, 2.4*/
+            1.5, 1.7, 1.71, 1.8, 2, 2.1, 2.2, 2.3, 2.35, 2.4
         };
 
         List<double> y = new List<double>() 
         {
-            18.422, 12.844, 9.659, 7.394, 5.670, 4.303, 3.196, 2.297, 1.572, 1.000, 0.569
-            /*7.76, 11.30, 11.50, 13.41, 18.40, 21.30, 24.50, 28.00, 29.85, 31.80*/
+            7.76, 11.30, 11.50, 13.41, 18.40, 21.30, 24.50, 28.00, 29.85, 31.80
         };
 
         List<double> lnx = new List<double>();
@@ -86,7 +84,7 @@ namespace _CM_Lab7
         void BuildLinear(double k, double b)
         {
             listBox.Items.Add("/// Линейный ///");
-            chart.Series.Add(new Series("Линейная") { ChartType = SeriesChartType.Line });
+            chart.Series.Add(new Series("Линейная") { ChartType = SeriesChartType.Spline });
             listBox.Items.Add($"Линейное уравнение: y = {k}x + ({b})");
             for (int i = 0; i < x.Count; i++)
             {
@@ -95,7 +93,7 @@ namespace _CM_Lab7
             }
             PreferedValue = ToShitDeltaY(LinearArray);
             PreferedString = "линейный";
-            listBox.Items.Add($"Зигма: {ToShitDeltaY(LinearArray)}");
+            //listBox.Items.Add($"Зигма: {ToShitDeltaY(LinearArray)}");
         }
 
         double ToShitDeltaY(List<double> Array)
@@ -131,10 +129,10 @@ namespace _CM_Lab7
                 dataGridView.Rows[7].Cells[i + 1].Value = Mul(lnx, lny).ToArray()[i];
                 Sum[3] += Mul(lnx, lny).ToArray()[i];
             }
-            dataGridView.Rows[4].Cells[12].Value = Sum[0];
-            dataGridView.Rows[5].Cells[12].Value = Sum[1];
-            dataGridView.Rows[6].Cells[12].Value = Sum[2];
-            dataGridView.Rows[7].Cells[12].Value = Sum[3];
+            dataGridView.Rows[4].Cells[11].Value = Sum[0];
+            dataGridView.Rows[5].Cells[11].Value = Sum[1];
+            dataGridView.Rows[6].Cells[11].Value = Sum[2];
+            dataGridView.Rows[7].Cells[11].Value = Sum[3];
             BuildDegree(Sum[0], Sum[1], Sum[2], Sum[3]);
         }
 
@@ -142,14 +140,15 @@ namespace _CM_Lab7
         void BuildDegree(double sumx, double sumy, double sumsqx, double sumyx)
         {
             listBox.Items.Add("/// Степенной ///");
-            chart.Series.Add(new Series("Степенная") { ChartType = SeriesChartType.Line });
+            chart.Series.Add(new Series("Степенная") { ChartType = SeriesChartType.Spline });
             listBox.Items.Add("Решение методом Крамера...");
             double m = Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[0];
             double c = Math.Exp(Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[1]);
             listBox.Items.Add($"Значение c: {c}");
             listBox.Items.Add($"Значение m: {m}");
             listBox.Items.Add($"Степенное уравнение: y = {c}x^{m}");
-            for(int i = 0; i < x.Count; i++)
+            labelDegree.Text = $"{(float)sumsqx}k + {(float)sumx}b = {(float)sumyx}\n{(float)sumx}k + {x.Count}b = {(float)sumy}";
+            for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Степенная"].Points.AddXY(x[i], c * Math.Pow(x[i], m));
                 DegreeArray.Add(c * Math.Pow(x[i], m));
@@ -158,7 +157,7 @@ namespace _CM_Lab7
             {
                 PreferedString = "степенной";
             }
-            listBox.Items.Add($"Зигма: {ToShitDeltaY(DegreeArray)}");
+            //listBox.Items.Add($"Зигма: {ToShitDeltaY(DegreeArray)}");
         }
 
         void FindSuareDifference()
@@ -179,15 +178,15 @@ namespace _CM_Lab7
                 dataGridView.Rows[11].Cells[i + 1].Value = Math.Pow(y[i] - DegreeArray[i], 2);
                 Sum[3] += Math.Pow(y[i] - DegreeArray[i], 2);
             }
-            dataGridView.Rows[8].Cells[12].Value = Sum[0];
-            dataGridView.Rows[9].Cells[12].Value = Sum[1];
-            dataGridView.Rows[10].Cells[12].Value = Sum[2];
-            dataGridView.Rows[11].Cells[12].Value = Sum[3];
+            dataGridView.Rows[8].Cells[11].Value = Sum[0];
+            dataGridView.Rows[9].Cells[11].Value = Sum[1];
+            dataGridView.Rows[10].Cells[11].Value = Sum[2];
+            dataGridView.Rows[11].Cells[11].Value = Sum[3];
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
-            chart.Series.Add(new Series("Исходная") { ChartType = SeriesChartType.Line });
+            chart.Series.Add(new Series("Исходная") { ChartType = SeriesChartType.Point });
             chart.Series["Исходная"].Points.DataBindXY(x, y);
             List<double> Sum = new List<double>() { 0, 0, 0, 0 };
             dataGridView.Rows.Add("x");
@@ -205,11 +204,11 @@ namespace _CM_Lab7
                 dataGridView.Rows[3].Cells[i + 1].Value = Mul(x, y).ToArray()[i];
                 Sum[3] += Mul(x, y).ToArray()[i];
             }
-            dataGridView.Rows[0].Cells[12].Value = Sum[0];
-            dataGridView.Rows[1].Cells[12].Value = Sum[1];
-            dataGridView.Rows[2].Cells[12].Value = Sum[2];
-            dataGridView.Rows[3].Cells[12].Value = Sum[3];
-            label.Text = $"{Sum[2]}k + {Sum[0]}b = {Sum[3]}\n{Sum[0]}k + {x.Count}b = {Sum[1]}";
+            dataGridView.Rows[0].Cells[11].Value = Sum[0];
+            dataGridView.Rows[1].Cells[11].Value = Sum[1];
+            dataGridView.Rows[2].Cells[11].Value = Sum[2];
+            dataGridView.Rows[3].Cells[11].Value = Sum[3];
+            labelLinear.Text = $"{Sum[2]}k + {Sum[0]}b = {Sum[3]}\n{Sum[0]}k + {x.Count}b = {Sum[1]}";
             listBox.Items.Add("Решение методом Крамера...");
             double k = Cramer(new List<List<double>> { new List<double> { Sum[2], Sum[0] }, new List<double> { Sum[0], x.Count } }, new List<double> { Sum[3], Sum[1] })[0];
             double b = Cramer(new List<List<double>> { new List<double> { Sum[2], Sum[0] }, new List<double> { Sum[0], x.Count } }, new List<double> { Sum[3], Sum[1] })[1];
@@ -218,7 +217,7 @@ namespace _CM_Lab7
             BuildLinear(k, b);
             BuildLogs();
             FindSuareDifference();
-            listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
+            //listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
             Start.Visible = false;
         }
     }

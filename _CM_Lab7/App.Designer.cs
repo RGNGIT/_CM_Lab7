@@ -1,4 +1,6 @@
-﻿namespace _CM_Lab7
+﻿using System;
+
+namespace _CM_Lab7
 {
     partial class App
     {
@@ -28,9 +30,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Start = new System.Windows.Forms.Button();
@@ -47,10 +49,12 @@
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label = new System.Windows.Forms.Label();
+            this.labelLinear = new System.Windows.Forms.Label();
             this.listBox = new System.Windows.Forms.ListBox();
+            this.labelDegree = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -58,16 +62,16 @@
             // 
             // chart
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart.Legends.Add(legend2);
+            chartArea6.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chart.Legends.Add(legend6);
             this.chart.Location = new System.Drawing.Point(12, 12);
             this.chart.Name = "chart";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart.Series.Add(series2);
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chart.Series.Add(series6);
             this.chart.Size = new System.Drawing.Size(776, 378);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
@@ -76,7 +80,7 @@
             // 
             this.Start.Location = new System.Drawing.Point(1004, 110);
             this.Start.Name = "Start";
-            this.Start.Size = new System.Drawing.Size(352, 23);
+            this.Start.Size = new System.Drawing.Size(251, 23);
             this.Start.TabIndex = 1;
             this.Start.Text = "Начать";
             this.Start.UseVisualStyleBackColor = true;
@@ -97,11 +101,10 @@
             this.Column9,
             this.Column10,
             this.Column11,
-            this.Column12,
-            this.Column13});
+            this.Column12});
             this.dataGridView.Location = new System.Drawing.Point(12, 396);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(1344, 385);
+            this.dataGridView.Size = new System.Drawing.Size(1243, 313);
             this.dataGridView.TabIndex = 2;
             // 
             // Column1
@@ -161,13 +164,8 @@
             // 
             // Column12
             // 
-            this.Column12.HeaderText = "";
+            this.Column12.HeaderText = "Сумма";
             this.Column12.Name = "Column12";
-            // 
-            // Column13
-            // 
-            this.Column13.HeaderText = "Сумма";
-            this.Column13.Name = "Column13";
             // 
             // pictureBox1
             // 
@@ -181,29 +179,58 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // label
+            // labelLinear
             // 
-            this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(1001, 55);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(0, 13);
-            this.label.TabIndex = 4;
+            this.labelLinear.AutoSize = true;
+            this.labelLinear.Location = new System.Drawing.Point(1001, 44);
+            this.labelLinear.Name = "labelLinear";
+            this.labelLinear.Size = new System.Drawing.Size(0, 13);
+            this.labelLinear.TabIndex = 4;
             // 
             // listBox
             // 
             this.listBox.FormattingEnabled = true;
-            this.listBox.Location = new System.Drawing.Point(794, 139);
+            this.listBox.Location = new System.Drawing.Point(793, 139);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(562, 251);
+            this.listBox.Size = new System.Drawing.Size(462, 251);
             this.listBox.TabIndex = 5;
+            // 
+            // labelDegree
+            // 
+            this.labelDegree.AutoSize = true;
+            this.labelDegree.Location = new System.Drawing.Point(1001, 83);
+            this.labelDegree.Name = "labelDegree";
+            this.labelDegree.Size = new System.Drawing.Size(0, 13);
+            this.labelDegree.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1001, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Линейный";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1001, 70);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(61, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Степенной";
             // 
             // App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1367, 793);
+            this.ClientSize = new System.Drawing.Size(1267, 722);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelDegree);
             this.Controls.Add(this.listBox);
-            this.Controls.Add(this.label);
+            this.Controls.Add(this.labelLinear);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.Start);
@@ -224,22 +251,24 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart;
         private System.Windows.Forms.Button Start;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label labelLinear;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.ListBox listBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label;
-        private System.Windows.Forms.ListBox listBox;
+        private System.Windows.Forms.Label labelDegree;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
