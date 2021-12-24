@@ -30,9 +30,9 @@ namespace _CM_Lab7
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Start = new System.Windows.Forms.Button();
@@ -62,23 +62,23 @@ namespace _CM_Lab7
             // 
             // chart
             // 
-            chartArea6.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.chart.Legends.Add(legend6);
+            chartArea3.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart.Legends.Add(legend3);
             this.chart.Location = new System.Drawing.Point(12, 12);
             this.chart.Name = "chart";
-            series6.ChartArea = "ChartArea1";
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            this.chart.Series.Add(series6);
-            this.chart.Size = new System.Drawing.Size(776, 378);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart.Series.Add(series3);
+            this.chart.Size = new System.Drawing.Size(776, 495);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
             // 
             // Start
             // 
-            this.Start.Location = new System.Drawing.Point(1004, 110);
+            this.Start.Location = new System.Drawing.Point(1004, 227);
             this.Start.Name = "Start";
             this.Start.Size = new System.Drawing.Size(251, 23);
             this.Start.TabIndex = 1;
@@ -102,7 +102,7 @@ namespace _CM_Lab7
             this.Column10,
             this.Column11,
             this.Column12});
-            this.dataGridView.Location = new System.Drawing.Point(12, 396);
+            this.dataGridView.Location = new System.Drawing.Point(12, 513);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.Size = new System.Drawing.Size(1243, 313);
             this.dataGridView.TabIndex = 2;
@@ -190,7 +190,7 @@ namespace _CM_Lab7
             // listBox
             // 
             this.listBox.FormattingEnabled = true;
-            this.listBox.Location = new System.Drawing.Point(793, 139);
+            this.listBox.Location = new System.Drawing.Point(793, 256);
             this.listBox.Name = "listBox";
             this.listBox.Size = new System.Drawing.Size(462, 251);
             this.listBox.TabIndex = 5;
@@ -225,7 +225,7 @@ namespace _CM_Lab7
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1267, 722);
+            this.ClientSize = new System.Drawing.Size(1267, 838);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelDegree);
@@ -237,7 +237,7 @@ namespace _CM_Lab7
             this.Controls.Add(this.chart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "App";
-            this.Text = "Form1";
+            this.Text = "ClownMath";
             ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
