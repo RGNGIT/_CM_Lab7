@@ -81,10 +81,10 @@ namespace _CM_Lab7
         List<double> LinearArray = new List<double>();
         List<double> DegreeArray = new List<double>();
         List<double> SquareArray = new List<double>();
+        List<double> HyperbArray = new List<double>();
 
         void BuildLinear(double k, double b)
         {
-            listBox.Items.Add("/// Линейный ///");
             chart.Series.Add(new Series("Линейная") { ChartType = SeriesChartType.Spline });
             listBox.Items.Add($"Линейное уравнение: y = {k}x + ({b})");
             for (int i = 0; i < x.Count; i++)
@@ -141,7 +141,7 @@ namespace _CM_Lab7
         void BuildDegree(double sumx, double sumy, double sumsqx, double sumyx)
         {
             listBox.Items.Add("/// Степенной ///");
-            chart.Series.Add(new Series("Степенная") { ChartType = SeriesChartType.Spline });
+            chart.Series.Add(new Series("Степенная") { ChartType = SeriesChartType.Spline, BorderWidth = 2 });
             listBox.Items.Add("Решение методом Крамера...");
             double m = Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[0];
             double c = Math.Exp(Cramer(new List<List<double>> { new List<double> { sumsqx, sumx }, new List<double> { sumx, x.Count } }, new List<double> { sumyx, sumy })[1]);
@@ -181,6 +181,7 @@ namespace _CM_Lab7
             dataGridView.Rows[8].Cells[11].Value = Sum[0];
             dataGridView.Rows[9].Cells[11].Value = Sum[1];
             dataGridView.Rows[10].Cells[11].Value = Sum[2];
+            labelSuqared.Text = $"{Sum[1]}a + {Sum[0]}b + {sqrx}c = {Sum[2]}\n{Sum[0]}a + {sqrx}b + {sumx}c = {sumxy}\n{sqrx}a + {sumx}b + {x.Count}c = {sumy}";
             Gauss gauss = new Gauss(3, 3);
             double[][] Mtr = new double[][] 
             {
@@ -192,6 +193,7 @@ namespace _CM_Lab7
             gauss.RightPart[1] = sumxy;
             gauss.RightPart[2] = sumy;
             gauss.Matrix = Mtr;
+            listBox.Items.Add("Решение методом Гаусса...");
             gauss.SolveMatrix();
             listBox.Items.Add($"Значение a: {gauss.Answer[0]}");
             listBox.Items.Add($"Значение b: {gauss.Answer[1]}");
@@ -204,41 +206,81 @@ namespace _CM_Lab7
             }
         }
 
+        void BuildHyperbola(double sumy)
+        {
+            listBox.Items.Add("/// Гиперболический ///");
+            chart.Series.Add(new Series("Гиперболическая") { ChartType = SeriesChartType.Spline });
+            dataGridView.Rows.Add("1/x");
+            dataGridView.Rows.Add("Sqr(1/x)");
+            dataGridView.Rows.Add("y/x");
+            List<double> Sum = new List<double>() { 0, 0, 0 };
+            for (int i = 0; i < x.Count; i++)
+            {
+                dataGridView.Rows[11].Cells[i + 1].Value = 1 / x[i];
+                Sum[0] += 1 / x[i];
+                dataGridView.Rows[12].Cells[i + 1].Value = Math.Pow(1 / x[i], 2);
+                Sum[1] += Math.Pow(1 / x[i], 2);
+                dataGridView.Rows[13].Cells[i + 1].Value = y[i] / x[i];
+                Sum[2] += y[i] / x[i];
+            }
+            dataGridView.Rows[11].Cells[11].Value = Sum[0];
+            dataGridView.Rows[12].Cells[11].Value = Sum[1];
+            dataGridView.Rows[13].Cells[11].Value = Sum[2];
+            double a = (sumy * Sum[1] - Sum[0] * Sum[2]) / (x.Count * Sum[1] - Sum[0] * Sum[0]);
+            double b = (x.Count * Sum[2] - Sum[0] * sumy) / (x.Count * Sum[1] - Sum[0] * Sum[0]);
+            listBox.Items.Add($"Значение a: {a}");
+            listBox.Items.Add($"Значение b: {b}");
+            for (int i = 0; i < x.Count; i++)
+            {
+                chart.Series["Гиперболическая"].Points.AddXY(x[i], a + (b / x[i]));
+                HyperbArray.Add(a + (b / x[i]));
+            }
+        }
+
         void FindSuareDifference()
         {
             dataGridView.Rows.Add("y(лин)");
             dataGridView.Rows.Add("y(стп)");
             dataGridView.Rows.Add("y(квд)");
+            dataGridView.Rows.Add("y(гпб)");
             dataGridView.Rows.Add("y - y(лин)");
             dataGridView.Rows.Add("y - y(стп)");
             dataGridView.Rows.Add("y - y(квд)");
-            List<double> Sum = new List<double>() { 0, 0, 0, 0, 0, 0 };
+            dataGridView.Rows.Add("y - y(гпб)");
+            List<double> Sum = new List<double>() { 0, 0, 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < x.Count; i++)
             {
-                dataGridView.Rows[11].Cells[i + 1].Value = LinearArray[i];
+                dataGridView.Rows[14].Cells[i + 1].Value = LinearArray[i];
                 Sum[0] += LinearArray[i];
-                dataGridView.Rows[12].Cells[i + 1].Value = DegreeArray[i];
+                dataGridView.Rows[15].Cells[i + 1].Value = DegreeArray[i];
                 Sum[1] += DegreeArray[i];
-                dataGridView.Rows[13].Cells[i + 1].Value = SquareArray[i];
+                dataGridView.Rows[16].Cells[i + 1].Value = SquareArray[i];
                 Sum[2] += SquareArray[i];
-                dataGridView.Rows[14].Cells[i + 1].Value = Math.Pow(y[i] - LinearArray[i], 2);
-                Sum[3] += Math.Pow(y[i] - LinearArray[i], 2);
-                dataGridView.Rows[15].Cells[i + 1].Value = Math.Pow(y[i] - DegreeArray[i], 2);
-                Sum[4] += Math.Pow(y[i] - DegreeArray[i], 2);
-                dataGridView.Rows[16].Cells[i + 1].Value = Math.Pow(y[i] - SquareArray[i], 2);
-                Sum[5] += Math.Pow(y[i] - SquareArray[i], 2);
+                dataGridView.Rows[17].Cells[i + 1].Value = HyperbArray[i];
+                Sum[3] += HyperbArray[i];
+                dataGridView.Rows[18].Cells[i + 1].Value = Math.Pow(y[i] - LinearArray[i], 2);
+                Sum[4] += Math.Pow(y[i] - LinearArray[i], 2);
+                dataGridView.Rows[19].Cells[i + 1].Value = Math.Pow(y[i] - DegreeArray[i], 2);
+                Sum[5] += Math.Pow(y[i] - DegreeArray[i], 2);
+                dataGridView.Rows[20].Cells[i + 1].Value = Math.Pow(y[i] - SquareArray[i], 2);
+                Sum[6] += Math.Pow(y[i] - SquareArray[i], 2);
+                dataGridView.Rows[21].Cells[i + 1].Value = Math.Pow(y[i] - HyperbArray[i], 2);
+                Sum[7] += Math.Pow(y[i] - HyperbArray[i], 2);
             }
-            dataGridView.Rows[11].Cells[11].Value = Sum[0];
-            dataGridView.Rows[12].Cells[11].Value = Sum[1];
-            dataGridView.Rows[13].Cells[11].Value = Sum[2];
-            dataGridView.Rows[14].Cells[11].Value = Sum[3];
-            dataGridView.Rows[15].Cells[11].Value = Sum[4];
-            dataGridView.Rows[16].Cells[11].Value = Sum[5];
+            dataGridView.Rows[14].Cells[11].Value = Sum[0];
+            dataGridView.Rows[15].Cells[11].Value = Sum[1];
+            dataGridView.Rows[16].Cells[11].Value = Sum[2];
+            dataGridView.Rows[17].Cells[11].Value = Sum[3];
+            dataGridView.Rows[18].Cells[11].Value = Sum[4];
+            dataGridView.Rows[19].Cells[11].Value = Sum[5];
+            dataGridView.Rows[20].Cells[11].Value = Sum[6];
+            dataGridView.Rows[21].Cells[11].Value = Sum[7];
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
-            chart.Series.Add(new Series("Исходная") { ChartType = SeriesChartType.Point });
+            listBox.Items.Add("/// Линейный ///");
+            chart.Series.Add(new Series("Исходная") { ChartType = SeriesChartType.Point, MarkerSize = 7 });
             chart.Series["Исходная"].Points.DataBindXY(x, y);
             List<double> Sum = new List<double>() { 0, 0, 0, 0 };
             dataGridView.Rows.Add("x");
@@ -269,6 +311,7 @@ namespace _CM_Lab7
             BuildLinear(k, b);
             BuildLogs();
             BuildSquare(Sum[3], Sum[1], Sum[2], Sum[0]);
+            BuildHyperbola(Sum[1]);
             FindSuareDifference();
             //listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
             Start.Visible = false;
