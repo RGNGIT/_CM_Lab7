@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 namespace _CM_Lab7
 {
@@ -76,7 +76,7 @@ namespace _CM_Lab7
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart.Series.Add(series1);
-            this.chart.Size = new System.Drawing.Size(776, 495);
+            this.chart.Size = new System.Drawing.Size(776, 508);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
             // 
@@ -106,9 +106,9 @@ namespace _CM_Lab7
             this.Column10,
             this.Column11,
             this.Column12});
-            this.dataGridView.Location = new System.Drawing.Point(12, 513);
+            this.dataGridView.Location = new System.Drawing.Point(12, 526);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(1243, 398);
+            this.dataGridView.Size = new System.Drawing.Size(1243, 385);
             this.dataGridView.TabIndex = 2;
             // 
             // Column1
@@ -196,7 +196,7 @@ namespace _CM_Lab7
             this.listBox.FormattingEnabled = true;
             this.listBox.Location = new System.Drawing.Point(793, 256);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(462, 251);
+            this.listBox.Size = new System.Drawing.Size(462, 264);
             this.listBox.TabIndex = 5;
             // 
             // labelDegree

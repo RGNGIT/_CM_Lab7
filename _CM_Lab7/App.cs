@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -22,11 +17,18 @@ namespace _CM_Lab7
         List<double> x = new List<double>()
         {
             1.5, 1.7, 1.71, 1.8, 2, 2.1, 2.2, 2.3, 2.35, 2.4
+            //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         };
 
         List<double> y = new List<double>() 
         {
             7.76, 11.30, 11.50, 13.41, 18.40, 21.30, 24.50, 28.00, 29.85, 31.80
+            //0.55, 0.8359, 1.1447, 1.4642, 1.6218, 1.9668, 2.1017, 2.3284, 2.5480, 2.8617
+        };
+
+        List<double> xx = new List<double>() 
+        {
+            2.022, 2.033, 2.055, 2.077, 2.099
         };
 
         List<double> lnx = new List<double>();
@@ -76,8 +78,6 @@ namespace _CM_Lab7
             }
         }
 
-        double PreferedValue;
-        string PreferedString;
         List<double> LinearArray = new List<double>();
         List<double> DegreeArray = new List<double>();
         List<double> SquareArray = new List<double>();
@@ -90,24 +90,12 @@ namespace _CM_Lab7
             for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Линейная"].Points.AddXY(x[i], k * x[i] + b);
-                LinearArray.Add(k * x[i] + b);
+                LinearArray.Add((float)(k * x[i] + b));
             }
-            PreferedValue = ToShitDeltaY(LinearArray);
-            PreferedString = "линейный";
-            //listBox.Items.Add($"Зигма: {ToShitDeltaY(LinearArray)}");
-        }
-
-        double ToShitDeltaY(List<double> Array)
-        {
-            double min = Math.Abs(Array[1] - Array[0]);
-            for(int i = 1; i < Array.Count; i++)
+            foreach(var i in xx)
             {
-                if(min > Math.Abs(Array[i] - Array[i - 1]))
-                {
-                    min = Math.Abs(Array[i] - Array[i - 1]);
-                }
+                listBox.Items.Add($"Линейные результаты: {(float)(k * i + b)}");
             }
-            return min;
         }
 
         void BuildLogs()
@@ -119,15 +107,15 @@ namespace _CM_Lab7
             dataGridView.Rows.Add("ln(x)ln(y)");
             for (int i = 0; i < x.Count; i++)
             {
-                dataGridView.Rows[4].Cells[i + 1].Value = Math.Log(x[i]);
+                dataGridView.Rows[4].Cells[i + 1].Value = (float)Math.Log(x[i]);
                 lnx.Add(Math.Log(x[i]));
                 Sum[0] += Math.Log(x[i]);
-                dataGridView.Rows[5].Cells[i + 1].Value = Math.Log(y[i]);
+                dataGridView.Rows[5].Cells[i + 1].Value = (float)Math.Log(y[i]);
                 lny.Add(Math.Log(y[i]));
                 Sum[1] += Math.Log(y[i]);
-                dataGridView.Rows[6].Cells[i + 1].Value = Squared(lnx).ToArray()[i];
+                dataGridView.Rows[6].Cells[i + 1].Value = (float)Squared(lnx).ToArray()[i];
                 Sum[2] += Squared(lnx).ToArray()[i];
-                dataGridView.Rows[7].Cells[i + 1].Value = Mul(lnx, lny).ToArray()[i];
+                dataGridView.Rows[7].Cells[i + 1].Value = (float)Mul(lnx, lny).ToArray()[i];
                 Sum[3] += Mul(lnx, lny).ToArray()[i];
             }
             dataGridView.Rows[4].Cells[11].Value = Sum[0];
@@ -152,13 +140,12 @@ namespace _CM_Lab7
             for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Степенная"].Points.AddXY(x[i], c * Math.Pow(x[i], m));
-                DegreeArray.Add(c * Math.Pow(x[i], m));
+                DegreeArray.Add((float)(c * Math.Pow(x[i], m)));
             }
-            if(PreferedValue > ToShitDeltaY(DegreeArray))
+            foreach (var i in xx)
             {
-                PreferedString = "степенной";
+                listBox.Items.Add($"Степенные результаты: {(float)Math.Pow(c * i, m)}");
             }
-            //listBox.Items.Add($"Зигма: {ToShitDeltaY(DegreeArray)}");
         }
 
         void BuildSquare(double sumxy, double sumy, double sqrx, double sumx)
@@ -171,11 +158,11 @@ namespace _CM_Lab7
             List<double> Sum = new List<double>() { 0, 0, 0 };
             for (int i = 0; i < x.Count; i++)
             {
-                dataGridView.Rows[8].Cells[i + 1].Value = Math.Pow(x[i], 3);
+                dataGridView.Rows[8].Cells[i + 1].Value = (float)Math.Pow(x[i], 3);
                 Sum[0] += Math.Pow(x[i], 3);
-                dataGridView.Rows[9].Cells[i + 1].Value = Math.Pow(x[i], 4);
+                dataGridView.Rows[9].Cells[i + 1].Value = (float)Math.Pow(x[i], 4);
                 Sum[1] += Math.Pow(x[i], 4);
-                dataGridView.Rows[10].Cells[i + 1].Value = Math.Pow(x[i], 2) * y[i];
+                dataGridView.Rows[10].Cells[i + 1].Value = (float)(Math.Pow(x[i], 2) * y[i]);
                 Sum[2] += Math.Pow(x[i], 2) * y[i];
             }
             dataGridView.Rows[8].Cells[11].Value = Sum[0];
@@ -202,7 +189,11 @@ namespace _CM_Lab7
             for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Квадратичная"].Points.AddXY(x[i], (gauss.Answer[0] * Math.Pow(x[i], 2)) + (gauss.Answer[1] * x[i]) + gauss.Answer[2]);
-                SquareArray.Add((gauss.Answer[0] * Math.Pow(x[i], 2)) + (gauss.Answer[1] * x[i]) + gauss.Answer[2]);
+                SquareArray.Add((float)((gauss.Answer[0] * Math.Pow(x[i], 2)) + (gauss.Answer[1] * x[i]) + gauss.Answer[2]));
+            }
+            foreach (var i in xx)
+            {
+                listBox.Items.Add($"Квадратичные результаты: {(float)(gauss.Answer[0] * Math.Pow(i, 2) + gauss.Answer[1] * i + gauss.Answer[2])}");
             }
         }
 
@@ -216,11 +207,11 @@ namespace _CM_Lab7
             List<double> Sum = new List<double>() { 0, 0, 0 };
             for (int i = 0; i < x.Count; i++)
             {
-                dataGridView.Rows[11].Cells[i + 1].Value = 1 / x[i];
+                dataGridView.Rows[11].Cells[i + 1].Value = (float)(1 / x[i]);
                 Sum[0] += 1 / x[i];
-                dataGridView.Rows[12].Cells[i + 1].Value = Math.Pow(1 / x[i], 2);
+                dataGridView.Rows[12].Cells[i + 1].Value = (float)Math.Pow(1 / x[i], 2);
                 Sum[1] += Math.Pow(1 / x[i], 2);
-                dataGridView.Rows[13].Cells[i + 1].Value = y[i] / x[i];
+                dataGridView.Rows[13].Cells[i + 1].Value = (float)(y[i] / x[i]);
                 Sum[2] += y[i] / x[i];
             }
             dataGridView.Rows[11].Cells[11].Value = Sum[0];
@@ -233,11 +224,15 @@ namespace _CM_Lab7
             for (int i = 0; i < x.Count; i++)
             {
                 chart.Series["Гиперболическая"].Points.AddXY(x[i], a + (b / x[i]));
-                HyperbArray.Add(a + (b / x[i]));
+                HyperbArray.Add((float)(a + (b / x[i])));
+            }
+            foreach (var i in xx)
+            {
+                listBox.Items.Add($"Гиперболические результаты: {(float)(a + (b / i))}");
             }
         }
 
-        void FindSuareDifference()
+        void FindSquareDifference()
         {
             dataGridView.Rows.Add("y(лин)");
             dataGridView.Rows.Add("y(стп)");
@@ -247,6 +242,14 @@ namespace _CM_Lab7
             dataGridView.Rows.Add("y - y(стп)");
             dataGridView.Rows.Add("y - y(квд)");
             dataGridView.Rows.Add("y - y(гпб)");
+            List<string> Methods = new List<string>() 
+            {
+                "Линейный",
+                "Степенной",
+                "Квадратичный",
+                "Гиперболический"
+            };
+            List<double> SqDiff = new List<double>();
             List<double> Sum = new List<double>() { 0, 0, 0, 0, 0, 0, 0, 0 };
             for (int i = 0; i < x.Count; i++)
             {
@@ -258,13 +261,13 @@ namespace _CM_Lab7
                 Sum[2] += SquareArray[i];
                 dataGridView.Rows[17].Cells[i + 1].Value = HyperbArray[i];
                 Sum[3] += HyperbArray[i];
-                dataGridView.Rows[18].Cells[i + 1].Value = Math.Pow(y[i] - LinearArray[i], 2);
+                dataGridView.Rows[18].Cells[i + 1].Value = (float)Math.Pow(y[i] - LinearArray[i], 2);
                 Sum[4] += Math.Pow(y[i] - LinearArray[i], 2);
-                dataGridView.Rows[19].Cells[i + 1].Value = Math.Pow(y[i] - DegreeArray[i], 2);
+                dataGridView.Rows[19].Cells[i + 1].Value = (float)Math.Pow(y[i] - DegreeArray[i], 2);
                 Sum[5] += Math.Pow(y[i] - DegreeArray[i], 2);
-                dataGridView.Rows[20].Cells[i + 1].Value = Math.Pow(y[i] - SquareArray[i], 2);
+                dataGridView.Rows[20].Cells[i + 1].Value = (float)Math.Pow(y[i] - SquareArray[i], 2);
                 Sum[6] += Math.Pow(y[i] - SquareArray[i], 2);
-                dataGridView.Rows[21].Cells[i + 1].Value = Math.Pow(y[i] - HyperbArray[i], 2);
+                dataGridView.Rows[21].Cells[i + 1].Value = (float)Math.Pow(y[i] - HyperbArray[i], 2);
                 Sum[7] += Math.Pow(y[i] - HyperbArray[i], 2);
             }
             dataGridView.Rows[14].Cells[11].Value = Sum[0];
@@ -272,9 +275,24 @@ namespace _CM_Lab7
             dataGridView.Rows[16].Cells[11].Value = Sum[2];
             dataGridView.Rows[17].Cells[11].Value = Sum[3];
             dataGridView.Rows[18].Cells[11].Value = Sum[4];
+            SqDiff.Add(Sum[4]);
             dataGridView.Rows[19].Cells[11].Value = Sum[5];
+            SqDiff.Add(Sum[5]);
             dataGridView.Rows[20].Cells[11].Value = Sum[6];
+            SqDiff.Add(Sum[6]);
             dataGridView.Rows[21].Cells[11].Value = Sum[7];
+            SqDiff.Add(Sum[7]);
+            int index = 0;
+            double min = SqDiff[0];
+            for(int i = 0; i < SqDiff.Count; i++)
+            {
+                if(min > SqDiff[i])
+                {
+                    index = i;
+                    min = SqDiff[i];
+                }
+            }
+            listBox.Items.Add($"Предпочтительный метод: {Methods[index]}");
         }
 
         private void Start_Click(object sender, EventArgs e)
@@ -293,9 +311,9 @@ namespace _CM_Lab7
                 Sum[0] += x[i];
                 dataGridView.Rows[1].Cells[i + 1].Value = y[i];
                 Sum[1] += y[i];
-                dataGridView.Rows[2].Cells[i + 1].Value = Squared(x).ToArray()[i];
+                dataGridView.Rows[2].Cells[i + 1].Value = (float)Squared(x).ToArray()[i];
                 Sum[2] += Squared(x).ToArray()[i];
-                dataGridView.Rows[3].Cells[i + 1].Value = Mul(x, y).ToArray()[i];
+                dataGridView.Rows[3].Cells[i + 1].Value = (float)Mul(x, y).ToArray()[i];
                 Sum[3] += Mul(x, y).ToArray()[i];
             }
             dataGridView.Rows[0].Cells[11].Value = Sum[0];
@@ -312,8 +330,11 @@ namespace _CM_Lab7
             BuildLogs();
             BuildSquare(Sum[3], Sum[1], Sum[2], Sum[0]);
             BuildHyperbola(Sum[1]);
-            FindSuareDifference();
-            //listBox.Items.Add($"По результатам зигмы побеждает {PreferedString} метод!");
+            FindSquareDifference();
+            //chart.Series.Remove(chart.Series["Гиперболическая"]);
+            //chart.Series.Remove(chart.Series["Степенная"]);
+            //chart.Series.Remove(chart.Series["Линейная"]);
+            //chart.Series.Remove(chart.Series["Квадратичная"]);
             Start.Visible = false;
         }
     }
